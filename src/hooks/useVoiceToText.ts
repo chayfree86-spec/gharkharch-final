@@ -88,6 +88,7 @@ export function parseVoiceTranscript(transcript: string): VoiceParsingResult {
 
 interface VoiceToTextOptions {
   continuous?: boolean;
+  interimResults?: boolean;
 }
 
 export function useVoiceToText(options: VoiceToTextOptions = {}) {
@@ -105,7 +106,7 @@ export function useVoiceToText(options: VoiceToTextOptions = {}) {
       setSupported(true);
       const recognition = new SpeechRecognition();
       recognition.continuous = options.continuous ?? false;
-      recognition.interimResults = false;
+      recognition.interimResults = options.interimResults ?? false;
       
       // Setup Indian languages + Hinglish parsing (en-IN captures Indian English and Hindi words effectively)
       recognition.lang = 'en-IN'; 
@@ -137,7 +138,7 @@ export function useVoiceToText(options: VoiceToTextOptions = {}) {
 
       recognitionRef.current = recognition;
     }
-  }, [options.continuous]);
+  }, [options.continuous, options.interimResults]);
 
   const startListening = () => {
     if (!supported || !recognitionRef.current) {

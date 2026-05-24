@@ -134,9 +134,10 @@ function App() {
   const {
     isListening: isHandsFreeListening,
     transcript: handsFreeTranscript,
+    startListening: startHandsFreeListening,
     stopListening: stopHandsFreeListening,
     parseHandsFreeCommand
-  } = useVoiceToText({ continuous: true });
+  } = useVoiceToText({ continuous: true, interimResults: true });
 
   // 1. Hands-Free listening self-healing loop
   useEffect(() => {
@@ -380,6 +381,17 @@ function App() {
     return activeMemberRelations.includes(rel);
   });
 
+  const handleHandsFreeToggle = () => {
+    if (handsFreeEnabled && isHandsFreeListening) {
+      stopHandsFreeListening();
+      setHandsFreeEnabled(false);
+      return;
+    }
+
+    setHandsFreeEnabled(true);
+    startHandsFreeListening();
+  };
+
   // View Router
   const renderActivePage = () => {
     switch (activeTab) {
@@ -482,14 +494,14 @@ function App() {
         {/* Quick Simulated Shortcuts */}
         <div className="flex gap-2">
           <button
-            onClick={() => setHandsFreeEnabled(!handsFreeEnabled)}
+            onClick={handleHandsFreeToggle}
             className={`h-8 w-8 rounded-xl border flex items-center justify-center transition-colors cursor-pointer
               ${handsFreeEnabled 
                 ? 'bg-orange-500 border-orange-500 text-white shadow-sm' 
                 : 'bg-white border-emerald-100 text-emerald-600 hover:bg-emerald-50'
               }
             `}
-            title={handsFreeEnabled ? "Deactivate Voice Assistant" : "Activate Voice Assistant"}
+            title={handsFreeEnabled && isHandsFreeListening ? "Deactivate Voice Assistant" : "Start Voice Assistant"}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -547,7 +559,9 @@ function App() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
             </span>
-            <span>🎙️ VOICE AI ACTIVE (SAY "500 KIRANA ME ADD KRO")</span>
+            <span>
+              {isHandsFreeListening ? 'VOICE AI LISTENING (SAY "500 KIRANA ME ADD KRO")' : 'VOICE AI READY - TAP MIC TO START'}
+            </span>
           </div>
           <button 
             type="button"

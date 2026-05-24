@@ -109,7 +109,7 @@ export function AddExpense({ onAddExpense, recentRemarks, onNavigate }: AddExpen
     startListening,
     stopListening,
     parseVoiceTranscript
-  } = useVoiceToText();
+  } = useVoiceToText({ interimResults: true });
 
   // Focus Amount input on load
   useEffect(() => {
@@ -128,10 +128,12 @@ export function AddExpense({ onAddExpense, recentRemarks, onNavigate }: AddExpen
       if (parsed.remarks) {
         setRemarks(parsed.remarks);
       }
-      // Stop listening after we get a stable result
-      setTimeout(() => {
-        setShowVoiceDialog(false);
-      }, 1000);
+      if (parsed.amount > 0 && parsed.remarks) {
+        setTimeout(() => {
+          stopListening();
+          setShowVoiceDialog(false);
+        }, 350);
+      }
     }
   }, [transcript]);
 
