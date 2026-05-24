@@ -1,7 +1,8 @@
 # Force HTTPS redirect for PWA & Service Worker
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
-RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+RewriteCond %{HTTP:X-Forwarded-Proto} !https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L,NE]
 
 # SPA fallback - all routes serve index.html
 RewriteCond %{REQUEST_FILENAME} !-f

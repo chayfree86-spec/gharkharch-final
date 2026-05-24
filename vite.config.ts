@@ -35,7 +35,7 @@ export default defineConfig({
     VitePWA({
       injectRegister: 'inline',
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'favicon.svg', 'logo.png', 'icons.svg', 'fonts/*.ttf'],
+      includeAssets: ['favicon.ico', 'favicon.svg', 'logo.png', 'pwa-192.png', 'pwa-512.png', 'apple-touch-icon.png', 'icons.svg', 'fonts/*.ttf'],
       devOptions: {
         enabled: true,
         type: 'module'
@@ -59,25 +59,25 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/logo.png',
+            src: '/pwa-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/pwa-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/logo.png',
+            src: '/pwa-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/logo.png',
+            src: '/pwa-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
