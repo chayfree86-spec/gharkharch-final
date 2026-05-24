@@ -30,13 +30,18 @@ const SPOKEN_NUMBERS: Record<string, number> = {
 };
 
 export function parseVoiceTranscript(transcript: string): VoiceParsingResult {
-  const words = transcript.toLowerCase().replace(/[,₹]/g, '').split(/\s+/);
+  const normalizedTranscript = transcript
+    .toLowerCase()
+    .replace(/[,₹]/g, '')
+    .replace(/(\d+)([a-zA-Z]+)/g, '$1 $2')
+    .replace(/([a-zA-Z]+)(\d+)/g, '$1 $2');
+  const words = normalizedTranscript.split(/\s+/).filter(Boolean);
   let amount = 0;
   let remarksWords: string[] = [];
   
   // Try to find raw digits first (e.g. "500", "1200")
   const digitRegex = /\b\d+\b/;
-  const digitMatch = transcript.match(digitRegex);
+  const digitMatch = normalizedTranscript.match(digitRegex);
   
   if (digitMatch) {
     amount = parseInt(digitMatch[0], 10);
@@ -249,7 +254,12 @@ export function parseHandsFreeCommand(transcript: string): {
   date: string; 
   success: boolean;
 } {
-  const normalized = transcript.toLowerCase().trim();
+  const normalized = transcript
+    .toLowerCase()
+    .trim()
+    .replace(/[,₹]/g, '')
+    .replace(/(\d+)([a-zA-Z]+)/g, '$1 $2')
+    .replace(/([a-zA-Z]+)(\d+)/g, '$1 $2');
   
   // Extract amount
   let amount = 0;
