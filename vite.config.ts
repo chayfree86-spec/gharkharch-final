@@ -47,6 +47,11 @@ export default defineConfig({
         name: 'GharKharch - Smart Family Expense Tracker',
         short_name: 'GharKharch',
         description: 'AI-Powered Smart Household Expense Tracker for Indian Families',
+        id: '/',
+        scope: '/',
+        lang: 'en-IN',
+        dir: 'ltr',
+        categories: ['finance', 'productivity', 'utilities'],
         theme_color: '#059669', // Emerald 600
         background_color: '#FCFBF7', // Cream background
         display: 'standalone',
