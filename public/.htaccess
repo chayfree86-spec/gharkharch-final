@@ -1,0 +1,33 @@
+# Force HTTPS redirect for PWA & Service Worker
+RewriteEngine On
+RewriteCond %{HTTPS} !=on
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# SPA fallback - all routes serve index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.html [L]
+
+# Cache static assets aggressively
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType application/manifest+json "access plus 0 seconds"
+</IfModule>
+
+# Correct MIME type for webmanifest
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>

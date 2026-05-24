@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <!-- Force HTTPS Redirect for PWA & Service Worker -->
+    <script>
+      if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        window.location.replace(window.location.href.replace(/^http:/i, 'https:'));
+      }
+    </script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
