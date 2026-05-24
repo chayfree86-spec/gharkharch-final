@@ -49,7 +49,7 @@ export default defineConfig({
         description: 'AI-Powered Smart Household Expense Tracker for Indian Families',
         id: '/',
         scope: '/',
-        lang: 'en-IN',
+        lang: 'en',
         dir: 'ltr',
         categories: ['finance', 'productivity', 'utilities'],
         theme_color: '#059669', // Emerald 600

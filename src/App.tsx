@@ -134,18 +134,13 @@ function App() {
   const {
     isListening: isHandsFreeListening,
     transcript: handsFreeTranscript,
-    startListening: startHandsFreeListening,
     stopListening: stopHandsFreeListening,
     parseHandsFreeCommand
   } = useVoiceToText({ continuous: true });
 
   // 1. Hands-Free listening self-healing loop
   useEffect(() => {
-    if (handsFreeEnabled && user) {
-      if (!isHandsFreeListening && !voiceToast) {
-        startHandsFreeListening();
-      }
-    } else {
+    if (!handsFreeEnabled || !user) {
       stopHandsFreeListening();
     }
   }, [handsFreeEnabled, isHandsFreeListening, user, voiceToast]);
