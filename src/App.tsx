@@ -137,7 +137,7 @@ function App() {
     startListening: startHandsFreeListening,
     stopListening: stopHandsFreeListening,
     parseHandsFreeCommand
-  } = useVoiceToText();
+  } = useVoiceToText({ continuous: true });
 
   // 1. Hands-Free listening self-healing loop
   useEffect(() => {

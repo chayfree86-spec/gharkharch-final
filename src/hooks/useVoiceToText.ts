@@ -86,7 +86,11 @@ export function parseVoiceTranscript(transcript: string): VoiceParsingResult {
   };
 }
 
-export function useVoiceToText() {
+interface VoiceToTextOptions {
+  continuous?: boolean;
+}
+
+export function useVoiceToText(options: VoiceToTextOptions = {}) {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -100,7 +104,7 @@ export function useVoiceToText() {
     if (SpeechRecognition) {
       setSupported(true);
       const recognition = new SpeechRecognition();
-      recognition.continuous = false;
+      recognition.continuous = options.continuous ?? false;
       recognition.interimResults = false;
       
       // Setup Indian languages + Hinglish parsing (en-IN captures Indian English and Hindi words effectively)
@@ -112,7 +116,8 @@ export function useVoiceToText() {
       };
 
       recognition.onresult = (event: any) => {
-        const text = event.results[0][0].transcript;
+        const latestResult = event.results[event.results.length - 1];
+        const text = latestResult[0].transcript;
         setTranscript(text);
       };
 
@@ -132,7 +137,7 @@ export function useVoiceToText() {
 
       recognitionRef.current = recognition;
     }
-  }, []);
+  }, [options.continuous]);
 
   const startListening = () => {
     if (!supported || !recognitionRef.current) {
