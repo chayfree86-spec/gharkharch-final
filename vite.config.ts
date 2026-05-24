@@ -36,6 +36,10 @@ export default defineConfig({
       injectRegister: 'inline',
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'favicon.svg', 'logo.png', 'icons.svg', 'fonts/*.ttf'],
+      devOptions: {
+        enabled: true,
+        type: 'module'
+      },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}'],
       },
@@ -50,16 +54,28 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: 'logo.png',
+            src: '/logo.png',
             sizes: '192x192',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: 'logo.png',
+            src: '/logo.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
+          },
+          {
+            src: '/logo.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/logo.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
           }
         ]
       }

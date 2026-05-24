@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { BottomNavBar } from './components/BottomNavBar';
 import { PWAInstallBanner } from './components/PWAInstallBanner';
@@ -7,14 +7,14 @@ import { EditExpenseModal } from './components/EditExpenseModal';
 import { BillPreviewModal } from './components/BillPreviewModal';
 
 // Lazy-loaded pages for optimized chunking and instant load speeds
-import { Onboarding } from './pages/Onboarding';
-import { Dashboard } from './pages/Dashboard';
-import { AddExpense } from './pages/AddExpense';
-import { ExpenseHistory } from './pages/ExpenseHistory';
-import { MonthlyReport } from './pages/MonthlyReport';
-import { FamilySharing } from './pages/FamilySharing';
-import { BudgetPlanning } from './pages/BudgetPlanning';
-import { Settings } from './pages/Settings';
+const Onboarding = lazy(() => import('./pages/Onboarding').then(m => ({ default: m.Onboarding })));
+const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m.Dashboard })));
+const AddExpense = lazy(() => import('./pages/AddExpense').then(m => ({ default: m.AddExpense })));
+const ExpenseHistory = lazy(() => import('./pages/ExpenseHistory').then(m => ({ default: m.ExpenseHistory })));
+const MonthlyReport = lazy(() => import('./pages/MonthlyReport').then(m => ({ default: m.MonthlyReport })));
+const FamilySharing = lazy(() => import('./pages/FamilySharing').then(m => ({ default: m.FamilySharing })));
+const BudgetPlanning = lazy(() => import('./pages/BudgetPlanning').then(m => ({ default: m.BudgetPlanning })));
+const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.Settings })));
 import { useVoiceToText } from './hooks/useVoiceToText';
 import { categorizeExpense } from './utils/aiCategorizer';
 import { 
@@ -472,7 +472,7 @@ function App() {
 
   // Google Onboarding Security Check
   if (user === null) {
-    return <Onboarding onLoginSuccess={setUser} />;
+    return <Suspense fallback={<></>}><Onboarding onLoginSuccess={setUser} /></Suspense>;
   }
 
   return (
@@ -566,12 +566,14 @@ function App() {
 
       {/* Screen Views Wrapper with fade-in animation */}
       <main className="flex-1 w-full pb-6">
-        <div
-          key={activeTab}
-          className="animate-fade-in"
-        >
-          {renderActivePage()}
-        </div>
+        <Suspense fallback={<></>}>
+          <div
+            key={activeTab}
+            className="animate-fade-in"
+          >
+            {renderActivePage()}
+          </div>
+        </Suspense>
       </main>
 
       {/* Persistent Bottom Bar */}
